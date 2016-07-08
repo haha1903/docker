@@ -35,15 +35,16 @@ RUN curl -fsSL https://github.com/krallin/tini/releases/download/v${TINI_VERSION
 COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy
 
 ARG JENKINS_VERSION
-ENV JENKINS_VERSION ${JENKINS_VERSION:2.12}
-ARG JENKINS_SHA
-ENV JENKINS_SHA ${JENKINS_SHA:-564e49fbd180d077a22a8c7bb5b8d4d58d2a18ce}
+ENV JENKINS_VERSION ${JENKINS_VERSION:-2.12}
+# ARG JENKINS_SHA
+# ENV JENKINS_SHA ${JENKINS_SHA:-564e49fbd180d077a22a8c7bb5b8d4d58d2a18ce}
 
 
 # could use ADD but this one does not check Last-Modified header 
 # see https://github.com/docker/docker/issues/8331
-RUN curl -fsSL http://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war/${JENKINS_VERSION}/jenkins-war-${JENKINS_VERSION}.war -o /usr/share/jenkins/jenkins.war \
-  && echo "$JENKINS_SHA  /usr/share/jenkins/jenkins.war" | sha1sum -c -
+RUN curl -fsSL http://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war/${JENKINS_VERSION}/jenkins-war-${JENKINS_VERSION}.war -o /usr/share/jenkins/jenkins.war 
+# \
+#  && echo "$JENKINS_SHA  /usr/share/jenkins/jenkins.war" | sha1sum -c -
 
 ENV JENKINS_UC https://updates.jenkins.io
 RUN chown -R ${user} "$JENKINS_HOME" /usr/share/jenkins/ref
